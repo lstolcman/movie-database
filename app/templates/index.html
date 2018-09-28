@@ -7,6 +7,16 @@
 </head>
 
 <body>
-    index.html content
+
+    <div>
+        <a href="/">Home</a>
+        {% if logout %}
+        <a href="/logout">Logout</a>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    {% block content %}{% endblock %}
 </body>
 </html>
