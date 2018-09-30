@@ -96,20 +96,34 @@ def register():
     return render_template('register.html', form=form)
 
 
-@app.route('/favourites')
+@app.route('/favourites/<imdb_id>')
+@app.route('/favourites/', defaults={'imdb_id':None})
 @login_required
-def favourites():
+def favourites(imdb_id):
+
+    if imdb_id:
+        fav_item = Favourite.query.filter_by(user_id=current_user.username, imdbID=imdb_id).first()
+        if fav_item:
+            db.session.delete(fav_item)
+            db.session.commit()
+        else:
+            fmt = 'http://www.omdbapi.com/?i={}&apikey={}'.format(imdb_id, app.config['OMDB_APIKEY'])
+            response = requests.get(fmt)
+            data = response.json()
+            if data['Response'] == 'True':
+                fav_new_item = Favourite(user=current_user, imdbID=imdb_id, title=data['Title'], poster=data['Poster'])
+                db.session.add(fav_new_item)
+                db.session.commit()
+            else:
+                flash('Cannot add to favourites')
+
     favourites = []
 
     for favourite in Favourite.query.filter_by(user_id=current_user.username).all():
-        fmt = 'http://www.omdbapi.com/?i={}&apikey={}'.format(favourite.imdbID, app.config['OMDB_APIKEY'])
-        response = requests.get(fmt)
-        data = response.json()
-        if data['Response'] == 'True':
-            favourites.append({
-                    'Title': favourite.title,
-                    'Poster': favourite.poster,
-                    'imdbID': favourite.imdbID})
+        favourites.append({
+            'Title': favourite.title,
+            'Poster': favourite.poster,
+            'imdbID': favourite.imdbID})
 
     return render_template('favourites.html', favourites=favourites)
 

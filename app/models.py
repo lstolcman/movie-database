@@ -36,5 +36,5 @@ class Favourite(db.Model):
     timestamp = db.Column(db.DateTime, index=True, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Favourite {} of user {}>'.format(self.movie_id, self.user_id)
+        return '<Favourite {} of user {}>'.format(self.imdbID, self.user_id)
 

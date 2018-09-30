@@ -5,6 +5,11 @@
     <link rel="stylesheet" href="{{url_for('.static', filename='styles.css')}}">
 {% endblock %}
 
+{% block scripts %}
+    {{super()}}
+    <script src="{{url_for('.static', filename='script.js')}}"></script>
+{% endblock %}
+
 {% block title %}Movie database{% endblock %}
 
 {% block navbar %}

@@ -4,21 +4,11 @@
 
 <h1>Favourites</h1>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-{% for message in messages %}
-<li>{{ message }}</li>
-{% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
 {% if favourites %}
     <table class="table">
     {% for favourite in favourites %}
     <tbody>
-        <tr>
+        <tr id="fav{{favourite.imdbID}}">
             <td><a href="{{ url_for('details', imdb_id=favourite.imdbID) }}">
                     {% if favourite.Poster == "N/A"%}
                     <span class="glyphicon glyphicon-picture"></span>
@@ -28,7 +18,9 @@
                 </a></td>
             <td><a href="{{ url_for('details', imdb_id=favourite.imdbID) }}">{{ favourite.Title }}</a></td>
             <td>
-                <a href="#"><span class="glyphicon glyphicon-heart"></span></a>
+                <a href="javascript:return false;" onclick="javascript:favourite('{{favourite.imdbID}}'); this.href='javascript:return false;';">
+                    <span id="heart{{favourite.imdbID}}" class="glyphicon glyphicon-heart"></span>
+                </a>
             </td>
         </tr>
     </tbody>

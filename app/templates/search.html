@@ -17,7 +17,7 @@
 {% if data %}
     <table class="table">
     {% for movie in data.Search %}
-        <tr>
+        <tr id="fav{{movie.imdbID}}">
             <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}">
                     {% if movie.Poster == "N/A"%}
                     <span class="glyphicon glyphicon-picture"></span>
@@ -26,7 +26,11 @@
                     {% endif %}
                 </a></td>
             <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}">{{ movie.Title }}</a></td>
-            <td><div><span class="glyphicon glyphicon-heart-empty" data-clicked="false"></span></div></td>
+            <td>
+                <a href="javascript:return false;" onclick="javascript:favourite('{{movie.imdbID}}')">
+                    <span id="heart{{movie.imdbID}}" class="glyphicon glyphicon-heart-empty"></span>
+                </a>
+            </td>
         </tr>
     {% endfor %}
     </table>
