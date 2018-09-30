@@ -10,7 +10,15 @@
 
     <div>
         <a href="{{ url_for('index') }}">Home</a>
-        {% if logout %}<a href="{{ url_for('logout') }}">Logout</a>{% endif %}
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        {% else %}
+        <a href="{{ url_for('search') }}">Search</a>
+        <a href="{{ url_for('favourites') }}">Favourites</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
     </div>
 
     <hr>

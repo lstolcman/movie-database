@@ -1,20 +1,41 @@
 from flask import render_template, flash, redirect, url_for
+from flask_login import current_user, login_user, logout_user
+
 from app import app
 from app.forms import SearchForm, LoginForm
+from app.models import User
 
 import requests
 import math
 
 
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route('/')
 def index():
+    return render_template('main.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data))
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
-    return render_template('main.html', form=form)
-    #return redirect('/search')
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -22,6 +43,7 @@ def search():
     if form.validate_on_submit():
         return redirect(url_for('search') + '/' + form.title.data)
     return render_template('search.html', form=form)
+
 
 @app.route('/search/<title>/<int:page>')
 @app.route('/search/<title>', defaults={'page':1})
@@ -53,5 +75,20 @@ def details(imdb_id):
         error = data['Error']
 
     return render_template('details.html', data=data, error=error)
+
+
+@app.route('/register')
+def register():
+    return redirect(url_for('index'))
+
+
+@app.route('/favourites')
+def favourites():
+    return redirect(url_for('index'))
+
+
+@app.route('/profile')
+def profile():
+    return redirect(url_for('index'))
 
 
