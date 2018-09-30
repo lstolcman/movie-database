@@ -11,8 +11,24 @@
     <p>{{ form.submit() }}</p>
 </form>
 
+
+{% if error %}
+    <p><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+
 {% if data %}
-data title exist: {{ data.title }}
+
+    <table border="1">
+    {% for movie in data.Search %}
+    <tbody>
+        <tr>
+            <td><a href="" alt="{{ movie.Title }}"><img src="{{ movie.Poster }}" width="300"></a></td>
+            <td><a href="" alt="{{ movie.Title }}">{{ movie.Title }}</a></td>
+        </tr>
+    </tbody>
+    {% endfor %}
+    </table>
+
 {% endif %}
 
 {% endblock %}
