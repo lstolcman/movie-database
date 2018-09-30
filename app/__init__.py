@@ -10,5 +10,5 @@ db = SQLAlchemy(app)
 login = LoginManager(app)
 bootstrap = Bootstrap(app)
 
-from app import routes
+from app import routes, errors
 

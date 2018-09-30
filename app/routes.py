@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import SearchForm, LoginForm, RegistrationForm
@@ -31,6 +31,7 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
@@ -38,6 +39,7 @@ def logout():
 
 
 @app.route('/search', methods=['GET', 'POST'])
+@login_required
 def search():
     form = SearchForm()
     if form.validate_on_submit():
@@ -47,6 +49,7 @@ def search():
 
 @app.route('/search/<title>/<int:page>')
 @app.route('/search/<title>', defaults={'page':1})
+@login_required
 def search_title(title, page):
     error = None
     pages = None
@@ -64,6 +67,7 @@ def search_title(title, page):
 
 
 @app.route('/details/<imdb_id>')
+@login_required
 def details(imdb_id):
     error = None
 
@@ -93,6 +97,7 @@ def register():
 
 
 @app.route('/favourites')
+@login_required
 def favourites():
     favourites = []
 
@@ -110,6 +115,7 @@ def favourites():
 
 
 @app.route('/profile')
+@login_required
 def profile():
     return render_template('profile.html')
 
