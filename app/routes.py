@@ -84,7 +84,20 @@ def register():
 
 @app.route('/favourites')
 def favourites():
-    favourites = Favourite.query.filter_by(user_id=current_user.username).all()
+
+    favourites = []
+
+    for favourite in Favourite.query.filter_by(user_id=current_user.username).all():
+        fmt = 'http://www.omdbapi.com/?i={}&apikey={}'.format(favourite.imdbID, app.config['OMDB_APIKEY'])
+        response = requests.get(fmt)
+        data = response.json()
+        if data['Response'] == 'True':
+            favourites.append({
+                    'Title': favourite.title,
+                    'Poster': favourite.poster,
+                    'imdbID': favourite.imdbID})
+
+
     return render_template('favourites.html', favourites=favourites)
 
 

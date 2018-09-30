@@ -30,7 +30,9 @@ class User(UserMixin, db.Model):
 class Favourite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    movie_id = db.Column(db.String(20), nullable=False)
+    imdbID = db.Column(db.String(20), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    poster = db.Column(db.String(150), nullable=False)
     timestamp = db.Column(db.DateTime, index=True, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):

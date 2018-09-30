@@ -28,6 +28,7 @@
         <tr>
             <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}"><img src="{{ movie.Poster }}" alt="{{ movie.Title }}" width="300"></a></td>
             <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}">{{ movie.Title }}</a></td>
+            <td>star</td>
         </tr>
     </tbody>
     {% endfor %}
