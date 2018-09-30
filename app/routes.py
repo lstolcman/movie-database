@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user
 
-from app import app
-from app.forms import SearchForm, LoginForm
+from app import app, db
+from app.forms import SearchForm, LoginForm, RegistrationForm
 from app.models import User, Favourite
 
 import requests
@@ -77,14 +77,23 @@ def details(imdb_id):
     return render_template('details.html', data=data, error=error)
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return redirect(url_for('index'))
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form)
 
 
 @app.route('/favourites')
 def favourites():
-
     favourites = []
 
     for favourite in Favourite.query.filter_by(user_id=current_user.username).all():
@@ -96,7 +105,6 @@ def favourites():
                     'Title': favourite.title,
                     'Poster': favourite.poster,
                     'imdbID': favourite.imdbID})
-
 
     return render_template('favourites.html', favourites=favourites)
 
