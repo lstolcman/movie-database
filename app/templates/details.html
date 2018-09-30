@@ -1,0 +1,68 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h1>Details</h1>
+
+{% if error %}
+    <p><strong>Error:</strong> {{ error }}</p>
+{% else %}
+
+
+    <table border="1">
+    <tbody>
+        <tr>
+            <td colspan="3"><a href="" alt="{{ data.Title }}">{{ data.Title }}</a></td>
+        </tr>
+        <tr>
+            <td rowspan="8"><a href="" alt="{{ data.Title }}"><img src="{{ data.Poster }}" width="300"></a></td>
+        </tr>
+        <tr>
+            <td><b>Year:</b></td>
+            <td>{{ data.Year }}</td>
+        </tr>
+        <tr>
+            <td><b>Rated:</b></td>
+            <td>{{ data.Rated }}</td>
+        </tr>
+        <tr>
+            <td><b>Released:</b></td>
+            <td>{{ data.Released }}</td>
+        </tr>
+        <tr>
+            <td><b>Runtime:</b></td>
+            <td>{{ data.Runtime }}</td>
+        </tr>
+        <tr>
+            <td><b>Genre:</b></td>
+            <td>{{ data.Genre }}</td>
+        </tr>
+        {% if data.Ratings %}
+        <tr>
+            <td colspan="2">
+                <b>Ratings</b>
+
+                <table border="1"><tbody>
+                    <tr>
+                        {% for num in data.Ratings %}
+                        <td>{{ num.Source}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for num in data.Ratings %}
+                        <td>{{ num.Value}}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody></table>
+
+            </td>
+            {% endif %}
+        </tr>
+    </tbody>
+    </table>
+
+
+{% endif %}
+
+{% endblock %}
+

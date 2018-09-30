@@ -26,8 +26,8 @@
     {% for movie in data.Search %}
     <tbody>
         <tr>
-            <td><a href="" alt="{{ movie.Title }}"><img src="{{ movie.Poster }}" width="300"></a></td>
-            <td><a href="" alt="{{ movie.Title }}">{{ movie.Title }}</a></td>
+            <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}"><img src="{{ movie.Poster }}" alt="{{ movie.Title }}" width="300"></a></td>
+            <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}">{{ movie.Title }}</a></td>
         </tr>
     </tbody>
     {% endfor %}
@@ -35,7 +35,6 @@
 
     {% if pages %}
         pages: {% for page in pages %}
-        <br/>
         <a href="/search/{{title}}/{{page}}">{{page}}</a>
         {% endfor %}
     {% endif %}
