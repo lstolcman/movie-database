@@ -1,15 +1,20 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from app.forms import SearchForm
+from app.forms import SearchForm, LoginForm
 
 import requests
 import math
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    #return render_template('main.html')
-    return redirect('/search')
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect(url_for('index'))
+    return render_template('main.html', form=form)
+    #return redirect('/search')
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
