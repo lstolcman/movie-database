@@ -28,7 +28,11 @@
             <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}">{{ movie.Title }}</a></td>
             <td>
                 <a href="javascript:return false;" onclick="javascript:favourite('{{movie.imdbID}}')">
+                    {% if movie.user_fav %}
+                    <span id="heart{{movie.imdbID}}" class="glyphicon glyphicon-heart"></span>
+                    {% else %}
                     <span id="heart{{movie.imdbID}}" class="glyphicon glyphicon-heart-empty"></span>
+                    {% endif %}
                 </a>
             </td>
         </tr>

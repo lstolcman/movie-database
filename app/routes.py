@@ -53,6 +53,7 @@ def search():
 def search_title(title, page):
     pages = None
 
+
     fmt = 'http://www.omdbapi.com/?type=movie&s={}&page={}&apikey={}'.format(title, page, app.config['OMDB_APIKEY'])
     response = requests.get(fmt)
     data = response.json()
@@ -60,6 +61,10 @@ def search_title(title, page):
     if data['Response'] == 'False':
         flash(data['Error'])
     else:
+        import sys
+        for i, v in enumerate(data['Search']):
+            data['Search'][i]['user_fav'] = Favourite.query.filter_by(user_id=current_user.username, imdbID=data['Search'][i]['imdbID']).first()
+            print(v, file=sys.stderr)
         pages = range(1, math.ceil(int(data['totalResults'])/10)+1)
 
     return render_template('search.html', data=data, title=title, pages=pages)
@@ -68,6 +73,7 @@ def search_title(title, page):
 @app.route('/details/<imdb_id>')
 @login_required
 def details(imdb_id):
+    user_fav = Favourite.query.filter_by(user_id=current_user.username, imdbID=imdb_id).first()
 
     fmt = 'http://www.omdbapi.com/?i={}&apikey={}'.format(imdb_id, app.config['OMDB_APIKEY'])
     response = requests.get(fmt)
@@ -75,8 +81,9 @@ def details(imdb_id):
 
     if data['Response'] == 'False':
         flash(data['Error'])
+        return redirect(url_for('details'))
 
-    return render_template('details.html', data=data)
+    return render_template('details.html', data=data, user_fav=user_fav)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -98,11 +105,10 @@ def register():
 @app.route('/favourites/', defaults={'imdb_id':None})
 @login_required
 def favourites(imdb_id):
-
+    user_fav = Favourite.query.filter_by(user_id=current_user.username, imdbID=imdb_id).first()
     if imdb_id:
-        fav_item = Favourite.query.filter_by(user_id=current_user.username, imdbID=imdb_id).first()
-        if fav_item:
-            db.session.delete(fav_item)
+        if user_fav:
+            db.session.delete(user_fav)
             db.session.commit()
         else:
             fmt = 'http://www.omdbapi.com/?i={}&apikey={}'.format(imdb_id, app.config['OMDB_APIKEY'])
@@ -123,7 +129,7 @@ def favourites(imdb_id):
             'Poster': favourite.poster,
             'imdbID': favourite.imdbID})
 
-    return render_template('favourites.html', favourites=favourites)
+    return render_template('favourites.html', favourites=favourites, user_fav=user_fav)
 
 
 @app.route('/profile')

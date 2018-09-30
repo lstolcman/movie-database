@@ -1,19 +1,26 @@
 function favourite(imdbID) {
-
     $.ajax({
-        url : '/favourites/'+imdbID
+        url : '/favourites/'+imdbID,
+        beforeSend: function() {
+            $('#heart'+imdbID).addClass('favourite-transform')
+                .delay(600)
+                .queue(function(){$(this)
+                .removeClass('favourite-transform')
+                .dequeue();
+                });
+        }
     })
         .done(function(response) {
-            $('#heart'+imdbID).toggleClass('favourite-transform');
-            $('#heart'+imdbID).toggleClass('glyphicon-heart').toggleClass('glyphicon-heart-empty');
+            $('#heart'+imdbID)
+            .toggleClass('glyphicon-heart-empty')
+            .toggleClass('glyphicon-heart');
         })
         .fail(function() {
-            alert( "Wystąpił błąd w połączniu");
+            //alert("error occured");
         })
         .always(function() {
             //alert('always');
         });
-
 }
 
 
