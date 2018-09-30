@@ -51,7 +51,6 @@ def search():
 @app.route('/search/<title>', defaults={'page':1})
 @login_required
 def search_title(title, page):
-    error = None
     pages = None
 
     fmt = 'http://www.omdbapi.com/?type=movie&s={}&page={}&apikey={}'.format(title, page, app.config['OMDB_APIKEY'])
@@ -63,22 +62,21 @@ def search_title(title, page):
     else:
         pages = range(1, math.ceil(int(data['totalResults'])/10)+1)
 
-    return render_template('search.html', data=data, title=title, error=error, pages=pages)
+    return render_template('search.html', data=data, title=title, pages=pages)
 
 
 @app.route('/details/<imdb_id>')
 @login_required
 def details(imdb_id):
-    error = None
 
     fmt = 'http://www.omdbapi.com/?i={}&apikey={}'.format(imdb_id, app.config['OMDB_APIKEY'])
     response = requests.get(fmt)
     data = response.json()
 
     if data['Response'] == 'False':
-        error = data['Error']
+        flash(data['Error'])
 
-    return render_template('details.html', data=data, error=error)
+    return render_template('details.html', data=data)
 
 
 @app.route('/register', methods=['GET', 'POST'])
