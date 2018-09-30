@@ -15,15 +15,19 @@
 
 
 {% if data %}
-    <table border="1">
+    <table class="table">
     {% for movie in data.Search %}
-    <tbody>
         <tr>
-            <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}"><img src="{{ movie.Poster }}" alt="{{ movie.Title }}" width="300"></a></td>
+            <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}">
+                    {% if movie.Poster == "N/A"%}
+                    <span class="glyphicon glyphicon-picture"></span>
+                    {% else %}
+                    <img src="{{ movie.Poster }}" alt="{{ movie.Title }}" width="300">
+                    {% endif %}
+                </a></td>
             <td><a href="{{ url_for('details', imdb_id=movie.imdbID) }}">{{ movie.Title }}</a></td>
-            <td>star</td>
+            <td><div><span class="glyphicon glyphicon-heart-empty" data-clicked="false"></span></div></td>
         </tr>
-    </tbody>
     {% endfor %}
     </table>
 
