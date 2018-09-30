@@ -1,28 +1,44 @@
-<!doctype html>
+{% extends 'bootstrap/base.html' %}
 
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Movie database</title>
-</head>
 
-<body>
+{% block title %}Movie database{% endblock %}
 
-    <div>
-        <a href="{{ url_for('index') }}">Home</a>
+{% block navbar %}
+    <nav class="navbar navbar-default">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            <li><a class="navbar-brand" href="{{ url_for('index') }}">Home</a></li>
         {% if current_user.is_anonymous %}
-        <a href="{{ url_for('register') }}">Register</a>
-        <a href="{{ url_for('login') }}">Login</a>
+            <li><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
         {% else %}
-        <a href="{{ url_for('search') }}">Search</a>
-        <a href="{{ url_for('favourites') }}">Favourites</a>
-        <a href="{{ url_for('profile') }}">Profile</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
+            <li><a class="nav-link" href="{{ url_for('search') }}">Search</a></li>
+            <li><a class="nav-link" href="{{ url_for('favourites') }}">Favourites</a></li>
+            <li><a class="nav-link" href="{{ url_for('profile') }}">Profile</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
         {% endif %}
+        </ul>
     </div>
+    </nav>
+{% endblock %}
 
-    <hr>
 
-    {% block content %}{% endblock %}
-</body>
-</html>
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
+

@@ -56,7 +56,7 @@ def search_title(title, page):
     data = response.json()
 
     if data['Response'] == 'False':
-        error = data['Error']
+        flash(data['Error'])
     else:
         pages = range(1, math.ceil(int(data['totalResults'])/10)+1)
 
@@ -111,6 +111,7 @@ def favourites():
 
 @app.route('/profile')
 def profile():
-    return redirect(url_for('index'))
+    return render_template('profile.html')
+
 
 
