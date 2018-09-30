@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h1>Favourites</h1>
+
+{% if favourites %}
+    <table border="1">
+    {% for favourite in favourites %}
+    <tbody>
+        <tr>
+            <td>{{favourite}}</td>
+            <td>{{favourite}}</td>
+            <td>unstar</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+    </table>
+{% else %}
+<p> Favourities list empty
+{% endif %}
+
+{% endblock %}
+

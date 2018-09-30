@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    favourites = db.relationship('Favourite', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -33,5 +34,5 @@ class Favourite(db.Model):
     timestamp = db.Column(db.DateTime, index=True, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Favourite {}>'.format(self.body)
+        return '<Favourite {} of user {}>'.format(self.movie_id, self.user_id)
 

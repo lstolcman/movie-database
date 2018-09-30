@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user
 
 from app import app
 from app.forms import SearchForm, LoginForm
-from app.models import User
+from app.models import User, Favourite
 
 import requests
 import math
@@ -84,7 +84,8 @@ def register():
 
 @app.route('/favourites')
 def favourites():
-    return redirect(url_for('index'))
+    favourites = Favourite.query.filter_by(user_id=current_user.username).all()
+    return render_template('favourites.html', favourites=favourites)
 
 
 @app.route('/profile')
