@@ -61,13 +61,12 @@ def search_title(title, page):
     if data['Response'] == 'False':
         flash(data['Error'])
     else:
-        import sys
         for i, v in enumerate(data['Search']):
             data['Search'][i]['user_fav'] = Favourite.query.filter_by(user_id=current_user.username, imdbID=data['Search'][i]['imdbID']).first()
-            print(v, file=sys.stderr)
-        pages = range(1, math.ceil(int(data['totalResults'])/10)+1)
+            data['active_page'] = page
+            data['pages'] = range(1, math.ceil(int(data['totalResults'])/10)+1)
 
-    return render_template('search.html', data=data, title=title, pages=pages)
+    return render_template('search.html', data=data, title=title)
 
 
 @app.route('/details/<imdb_id>')
@@ -123,7 +122,8 @@ def favourites(imdb_id):
 
     favourites = []
 
-    for favourite in Favourite.query.filter_by(user_id=current_user.username).all():
+    favourities_db = Favourite.query.filter_by(user_id=current_user.username).all()
+    for favourite in favourities_db:
         favourites.append({
             'Title': favourite.title,
             'Poster': favourite.poster,
