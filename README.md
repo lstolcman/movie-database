@@ -17,7 +17,8 @@ Entire project should be available as an open source project on GitHub. Please c
 
 ## Deploy
 
-Use `docker-compose`
+Configuration is based on `docker-compose.yml`.
+You may change your api-key for `omdbapi` in config.py
 
 
 ### Windows
@@ -26,6 +27,7 @@ Use `docker-compose`
 
 ### Linux
 
-`export FLASK_APP=moviedb.py flask run`
+`docker-compose build --no-cache`
+`docker-compose up`
 
 

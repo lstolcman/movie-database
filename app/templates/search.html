@@ -16,7 +16,6 @@
 
 {% if data %}
 
-
     <table class="table">
     {% for movie in data.Search %}
         <tr id="fav{{movie.imdbID}}">
@@ -41,7 +40,7 @@
     {% endfor %}
     </table>
 
-        {% if data.pages %}
+    {% if data.pages %}
     <div class="text-center">
         <ul class="pagination pagination-sm text-center">
             {% for page in data.pages %}
