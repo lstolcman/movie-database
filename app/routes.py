@@ -114,7 +114,7 @@ def favourites(imdb_id):
             response = requests.get(fmt)
             data = response.json()
             if data['Response'] == 'True':
-                fav_new_item = Favourite(user=current_user, imdbID=imdb_id, title=data['Title'], poster=data['Poster'])
+                fav_new_item = Favourite(user_id=current_user.username, imdbID=imdb_id, title=data['Title'], poster=data['Poster'])
                 db.session.add(fav_new_item)
                 db.session.commit()
             else:

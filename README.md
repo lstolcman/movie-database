@@ -7,7 +7,7 @@ Simple website that allows browsing / searching movie database provided by `http
 
 ## Technology
 
-Any
+Python, Flask, Bootstrap, JQuery, Docker
 
 
 ## Requirements
@@ -15,19 +15,20 @@ Any
 Entire project should be available as an open source project on GitHub. Please commit your work on a regular basis (rather than one huge commit). The project should contain README file with information how to install application in local environment.
 
 
+## Windows -- debugging
+
+`env FLASK_APP=moviedb.py FLASK_DEBUG=1 flask run`
+
+
 ## Deploy
 
 Configuration is based on `docker-compose.yml`.
 You may change your api-key for `omdbapi` in config.py
 
-
-### Windows
-
-`env FLASK_APP=moviedb.py flask run`
-
 ### Linux
 
 `docker-compose build --no-cache`
+
 `docker-compose up`
 
 
